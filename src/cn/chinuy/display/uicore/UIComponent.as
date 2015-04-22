@@ -27,7 +27,13 @@ package cn.chinuy.display.uicore {
 		private var skinName : String;
 		private var focusEnabledValue : Boolean = true;
 		private var enabledValue : Boolean = true;
-		private var tipValue : String = "";
+		
+		private var _tipValue : String = "";
+		private var _tipFollowMouseX : Boolean = true;
+		private var _tipFollowMouseY : Boolean = true;
+		private var _tipHOffset : Number = 10;
+		private var _tipVOffset : Number = 10;
+		private var _tipAnchorPoint : uint = 0;
 		
 		public function UIComponent() {
 			super();
@@ -62,11 +68,56 @@ package cn.chinuy.display.uicore {
 		}
 		
 		public function get tip() : String {
-			return tipValue;
+			return _tipValue;
 		}
 		
 		public function set tip( value : String ) : void {
-			tipValue = value;
+			_tipValue = value;
+			updateTip();
+		}
+		
+		public function get tipAnchorPoint() : uint {
+			return _tipAnchorPoint;
+		}
+		
+		public function set tipAnchorPoint( value : uint ) : void {
+			_tipAnchorPoint = value;
+			updateTip();
+		}
+		
+		public function get tipVOffset() : Number {
+			return _tipVOffset;
+		}
+		
+		public function set tipVOffset( value : Number ) : void {
+			_tipVOffset = value;
+			updateTip();
+		}
+		
+		public function get tipHOffset() : Number {
+			return _tipHOffset;
+		}
+		
+		public function set tipHOffset( value : Number ) : void {
+			_tipHOffset = value;
+			updateTip();
+		}
+		
+		public function get tipFollowMouseY() : Boolean {
+			return _tipFollowMouseY;
+		}
+		
+		public function set tipFollowMouseY( value : Boolean ) : void {
+			_tipFollowMouseY = value;
+			updateTip();
+		}
+		
+		public function get tipFollowMouseX() : Boolean {
+			return _tipFollowMouseX;
+		}
+		
+		public function set tipFollowMouseX( value : Boolean ) : void {
+			_tipFollowMouseX = value;
 			updateTip();
 		}
 		
@@ -246,13 +297,13 @@ package cn.chinuy.display.uicore {
 		private function updateTip() : void {
 			if( stage && tooltip ) {
 				if( tip != "" && mouseOver ) {
+					tooltip.target = this;
 					stage.addChild( tooltip );
-					tooltip.label = tip;
 				} else {
 					if( tooltip.parent ) {
 						tooltip.parent.removeChild( tooltip );
 					}
-					tooltip.label = "";
+					tooltip.target = null;
 				}
 			}
 		}

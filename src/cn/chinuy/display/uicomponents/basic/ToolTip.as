@@ -4,8 +4,10 @@ package cn.chinuy.display.uicomponents.basic {
 	import cn.chinuy.display.uicomponents.text.Label;
 	import cn.chinuy.display.uicore.UIComponent;
 	
+	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	/**
 	 * @author chin
@@ -35,14 +37,9 @@ package cn.chinuy.display.uicomponents.basic {
 		protected var _label : Label = Label.create();
 		protected var _autoSizeModel : AutoSizeModel;
 		
-		private var _followMouse : Boolean = true;
-		private var _hOffset : Number = 1;
-		private var _vOffset : Number = 1;
-		private var _anchorPoint : uint = 0;
-		
 		private var _arrow : UISprite;
-		
-		private var stageEventPengding : Boolean;
+		private var _target : UIComponent;
+		private var _stage : Stage;
 		
 		public function ToolTip() {
 			super();
@@ -50,7 +47,6 @@ package cn.chinuy.display.uicomponents.basic {
 			addChild( _label );
 			initSkin();
 			autoSizeModel.sizeBy( _label );
-			followMouse = true;
 		}
 		
 		override protected function onViewChanged() : void {
@@ -59,31 +55,28 @@ package cn.chinuy.display.uicomponents.basic {
 			_arrow = view.element( "TooltipArrow" ) as UISprite;
 		}
 		
-		public function set label( value : String ) : void {
-			_label.value = value;
-			updatePosition();
+		public function get target() : UIComponent {
+			return _target;
 		}
 		
-		public function get label() : String {
-			return _label.value;
-		}
-		
-		public function get vOffset() : Number {
-			return _vOffset;
-		}
-		
-		public function set vOffset( value : Number ) : void {
-			_vOffset = value;
-			updatePosition();
-		}
-		
-		public function get hOffset() : Number {
-			return _hOffset;
-		}
-		
-		public function set hOffset( value : Number ) : void {
-			_hOffset = value;
-			updatePosition();
+		public function set target( value : UIComponent ) : void {
+			_target = value;
+			if( target ) {
+				_label.value = target.tip;
+				checkAnchorPoint();
+				if( stage ) {
+					updatePosition();
+				} else {
+					addEventListener( Event.ADDED_TO_STAGE, onAdded );
+				}
+			} else {
+				_label.value = "";
+				removeEventListener( Event.ADDED_TO_STAGE, onAdded );
+				if( _stage ) {
+					_stage.removeEventListener( MouseEvent.MOUSE_MOVE, updatePosition );
+					_stage = null;
+				}
+			}
 		}
 		
 		/**
@@ -91,20 +84,20 @@ package cn.chinuy.display.uicomponents.basic {
 		 *	7|X|3<br>
 		 *	6|5|4<br>
 		 **/
-		public function get anchorPoint() : uint {
-			return _anchorPoint;
-		}
+		private var anchorPoint : int = -1;
+		private var anchorPointX : Number;
+		private var anchorPointY : Number;
 		
-		public function set anchorPoint( value : uint ) : void {
-			_anchorPoint = value;
-		}
+		private var targetLocalPoint : Point = new Point();
+		private var targetGlobalPoint : Point;
 		
-		protected function updatePosition() : void {
-			if( parent ) {
+		private function checkAnchorPoint() : void {
+			var apChanged : Boolean = anchorPoint != target.tipAnchorPoint;
+			if( apChanged ) {
 				var halfWidth : Number = width / 2;
 				var halfHeight : Number = height / 2;
-				var anchorPointX : Number = parent.mouseX;
-				var anchorPointY : Number = parent.mouseY;
+				anchorPoint = target.tipAnchorPoint;
+				anchorPointX = anchorPointY = 0;
 				switch( anchorPoint ) {
 					case 1:
 						anchorPointX -= halfWidth;
@@ -134,51 +127,55 @@ package cn.chinuy.display.uicomponents.basic {
 					default:
 						break;
 				}
-				var posX : Number = anchorPointX + hOffset;
-				var posY : Number = anchorPointY + vOffset;
+			}
+		}
+		
+		private function updatePosition( event : Event = null ) : void {
+			
+			if( parent ) {
+				
+				targetLocalPoint.x = target.x;
+				targetLocalPoint.y = target.y;
+				targetGlobalPoint = target.localToGlobal( targetLocalPoint );
+				
+				var posX : Number = anchorPointX + target.tipHOffset;
+				if( target.tipFollowMouseX ) {
+					posX += stage.mouseX;
+				} else {
+					posX += targetGlobalPoint.x;
+				}
+				
+				var posY : Number = anchorPointY + target.tipVOffset;
+				if( target.tipFollowMouseY ) {
+					posY += stage.mouseY;
+				} else {
+					posY += targetGlobalPoint.y;
+				}
+				
 				x = Math.max( 0, Math.min( posX, stage.stageWidth - width ));
 				y = Math.max( 0, Math.min( posY, stage.stageHeight - height ));
+				
 				if( _arrow ) {
+					var halfWidth : Number = width / 2;
 					var hw : Number = _arrow.width / 2;
 					_arrow.hcenter = Math.max( hw - halfWidth, Math.min( posX - x, halfWidth - hw ));
 				}
 			}
 		}
 		
-		public function get followMouse() : Boolean {
-			return _followMouse;
-		}
-		
-		public function set followMouse( value : Boolean ) : void {
-			_followMouse = value;
-			if( value ) {
-				if( stage ) {
-					addStageEvent();
-				} else {
-					stageEventPengding = true;
-					addEventListener( Event.ADDED_TO_STAGE, onAdded );
-				}
-			} else {
-				stageEventPengding = false;
-				removeEventListener( Event.ADDED_TO_STAGE, onAdded );
-			}
-		}
-		
 		private function onAdded( event : Event ) : void {
-			if( stageEventPengding && stage ) {
-				stageEventPengding = false;
-				removeEventListener( Event.ADDED_TO_STAGE, onAdded );
-				addStageEvent();
+			removeEventListener( Event.ADDED_TO_STAGE, onAdded );
+			if( _stage == null && stage ) {
+				_stage = stage;
+				updatePosition();
+				if( target.tipFollowMouseX || target.tipFollowMouseY ) {
+					stage.addEventListener( MouseEvent.MOUSE_MOVE, updatePosition );
+				}
 			}
 		}
 		
-		private function addStageEvent() : void {
-			updatePosition();
-			stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
-		}
-		
-		private function onMouseMove( event : MouseEvent ) : void {
-			updatePosition();
+		override public function set tip( value : String ) : void {
+			//do nothing
 		}
 		
 		override protected function get defaultSkin() : String {
