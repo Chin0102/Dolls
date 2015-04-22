@@ -29,12 +29,12 @@ package cn.chinuy.display.uicomponents.container {
 			tweenTransition.negativeObj = value;
 		}
 		
-		public function get positiveDuraion() : int {
-			return tweenTransition.positiveDuraion;
+		public function get positiveDuration() : int {
+			return tweenTransition.positiveDuration;
 		}
 		
-		public function set positiveDuraion( value : int ) : void {
-			tweenTransition.positiveDuraion = value;
+		public function set positiveDuration( value : int ) : void {
+			tweenTransition.positiveDuration = value;
 		}
 		
 		public function get positiveObj() : Object {

@@ -15,7 +15,7 @@ package cn.chinuy.display.uicomponents.supports.transition {
 		protected var tween : Tween = new Tween();
 		
 		private var _positiveObj : Object;
-		private var _positiveDuraion : int;
+		private var _positiveDuration : int;
 		private var _negativeObj : Object;
 		private var _negativeDuration : int;
 		
@@ -26,7 +26,7 @@ package cn.chinuy.display.uicomponents.supports.transition {
 			super();
 			this.positiveObj = positiveObj;
 			this.negativeObj = negativeObj;
-			this.positiveDuraion = positiveDuraion;
+			this.positiveDuration = positiveDuraion;
 			this.negativeDuration = negativeDuration;
 		}
 		
@@ -46,12 +46,12 @@ package cn.chinuy.display.uicomponents.supports.transition {
 			_negativeObj = value;
 		}
 		
-		public function get positiveDuraion() : int {
-			return _positiveDuraion;
+		public function get positiveDuration() : int {
+			return _positiveDuration;
 		}
 		
-		public function set positiveDuraion( value : int ) : void {
-			_positiveDuraion = value;
+		public function set positiveDuration( value : int ) : void {
+			_positiveDuration = value;
 		}
 		
 		public function get positiveObj() : Object {
@@ -79,7 +79,7 @@ package cn.chinuy.display.uicomponents.supports.transition {
 			}
 			if( positive ) {
 				target.displayObject.visible = true;
-				tween.begin( target.displayObject, positiveObj, positiveDuraion );
+				tween.begin( target.displayObject, positiveObj, positiveDuration );
 			} else {
 				tween.begin( target.displayObject, negativeObj, negativeDuration );
 			}
