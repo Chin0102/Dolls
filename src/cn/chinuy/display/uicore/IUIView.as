@@ -23,6 +23,7 @@ package cn.chinuy.display.uicore {
 		
 		//Component
 		function addComponent( name : String, component : UIComponent ) : void;
+		function hasComponent( name : String, isPlaceHolder : Boolean ) : Boolean;
 		
 		//Setting
 		function setting( key : String ) : *;

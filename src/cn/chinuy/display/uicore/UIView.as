@@ -112,6 +112,14 @@ package cn.chinuy.display.uicore {
 			addChild( obj );
 		}
 		
+		public function hasComponent( name : String, isPlaceHolder : Boolean ) : Boolean {
+			if( isPlaceHolder ) {
+				return components[ name ] is SkinUIPlaceHolder;
+			} else {
+				return components[ name ] is UIComponent;
+			}
+		}
+		
 		public function addComponent( name : String, component : UIComponent ) : void {
 			var obj : SkinUIPlaceHolder = components[ name ] as SkinUIPlaceHolder;
 			if( obj ) {
