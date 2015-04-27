@@ -124,6 +124,7 @@ package cn.chinuy.display.uicore {
 			var obj : SkinUIPlaceHolder = components[ name ] as SkinUIPlaceHolder;
 			if( obj ) {
 				obj.replace( component );
+				component.name = name;
 				components[ name ] = component;
 			}
 		}
