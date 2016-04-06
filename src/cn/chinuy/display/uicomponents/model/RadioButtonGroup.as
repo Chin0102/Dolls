@@ -33,6 +33,14 @@ package cn.chinuy.display.uicomponents.model {
 			return _name;
 		}
 		
+		public function numRadioButtons() : int {
+			return btnMap.length;
+		}
+		
+		public function getRadioButtonIndex( button : RadioButton ) : int {
+			return btnMap.indexOf( button );
+		}
+		
 		public function getRadioButton( id : int ) : RadioButton {
 			return btnMap[ id ];
 		}
