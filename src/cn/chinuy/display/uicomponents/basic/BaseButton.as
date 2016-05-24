@@ -1,4 +1,5 @@
 package cn.chinuy.display.uicomponents.basic {
+	import cn.chinuy.data.string.isNull;
 	import cn.chinuy.display.uicore.UIComponent;
 	
 	/**
@@ -26,6 +27,9 @@ package cn.chinuy.display.uicomponents.basic {
 		private var selectedValue : Boolean;
 		private var _buttonMode : Boolean;
 		
+		private var _unselectedTip : String;
+		private var _selectedTip : String;
+		
 		public function BaseButton() {
 			super();
 			buttonMode = true;
@@ -49,6 +53,24 @@ package cn.chinuy.display.uicomponents.basic {
 		
 		override protected function get defaultMouseChildren() : Boolean {
 			return false;
+		}
+		
+		public function get selectedTip() : String {
+			return _selectedTip;
+		}
+		
+		public function set selectedTip( value : String ) : void {
+			_selectedTip = value;
+			updateState();
+		}
+		
+		public function get unselectedTip() : String {
+			return _unselectedTip;
+		}
+		
+		public function set unselectedTip( value : String ) : void {
+			_unselectedTip = value;
+			updateState();
 		}
 		
 		public function get selected() : Boolean {
@@ -83,6 +105,11 @@ package cn.chinuy.display.uicomponents.basic {
 			var si : int;
 			var dsi : int = 1;
 			if( enabled ) {
+				if( isNull( _selectedTip ))
+					_selectedTip = tip;
+				if( isNull( _unselectedTip ))
+					_unselectedTip = tip;
+				tip = selected ? selectedTip : unselectedTip;
 				si = mouseDown ? 3 : ( mouseOver ? 2 : 1 );
 				if( selected ) {
 					si += 3;
