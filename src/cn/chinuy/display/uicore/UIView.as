@@ -32,6 +32,7 @@ package cn.chinuy.display.uicore {
 			if( hide ) {
 				element.visible = false;
 			}
+			element.name = name;
 			elements[ name ] = element;
 			if( add ) {
 				addChild( element );
