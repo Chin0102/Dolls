@@ -77,6 +77,10 @@ package cn.chinuy.display.uicore {
 			return uiMap[ name ];
 		}
 		
+		public function hasUI( name : String ) : Boolean {
+			return uiMap[ name ] != null;
+		}
+		
 		public function registerUIClass( name : String, ComponentRef : Class ) : void {
 			uiRefMap[ name ] = ComponentRef;
 		}

@@ -57,6 +57,10 @@ package cn.chinuy.display.uicore {
 			return skinPackage.ui( name );
 		}
 		
+		public function hasUI( name : String ) : Boolean {
+			return skinPackage.hasUI( name );
+		}
+		
 		public function registerUIClass( name : String, ComponentRef : Class ) : void {
 			skinPackage.registerUIClass( name, ComponentRef );
 		}
