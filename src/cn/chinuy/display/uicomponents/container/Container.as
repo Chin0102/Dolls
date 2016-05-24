@@ -18,9 +18,13 @@ package cn.chinuy.display.uicomponents.container {
 		
 		public static const Resize : String = "ContainerResize";
 		
-		private var _innerContainer : UIContainer;
+		public static const Setting_Background : String = "BackgroundSetting";
+		
+		protected var _innerContainer : UIContainer;
 		private var _transition : ITransition;
 		private var _isDisplay : Boolean = true;
+		
+		private var _bg : DisplayObject;
 		
 		private var _mask : Shape;
 		private var _maskEnabled : Boolean;
@@ -79,6 +83,28 @@ package cn.chinuy.display.uicomponents.container {
 				_innerContainer = new UIContainer();
 			}
 			return _innerContainer;
+		}
+		
+		override protected function onViewChanged() : void {
+			super.onViewChanged();
+			if( _bg ) {
+				superRemoveChild( _bg );
+			}
+			if( view.hasSetting( Setting_Background )) {
+				var setting : Object = view.setting( Setting_Background );
+				if( setting[ "source" ]) {
+					_bg = skinManager.currentPackage.createDisplay( setting[ "source" ]);
+					if( _bg ) {
+						var properties : Object = setting[ "properties" ];
+						if( properties ) {
+							for( var p : String in properties ) {
+								_bg[ p ] = properties[ p ];
+							}
+						}
+						superAddChildAt( _bg, 0 );
+					}
+				}
+			}
 		}
 		
 		protected function newTransition() : ITransition {
