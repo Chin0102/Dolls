@@ -5,8 +5,10 @@ package cn.chinuy.display {
 	import cn.chinuy.display.layout.LayoutModel;
 	
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.geom.Point;
 	
 	/**
 	 * @author chin
@@ -160,6 +162,19 @@ package cn.chinuy.display {
 		
 		override public function set height( value : Number ) : void {
 			layout.height = value;
+		}
+		
+		override public function localToGlobal( point : Point ) : Point {
+			var np : Point = point.clone();
+			var p : DisplayObjectContainer = parent;
+			while( p ) {
+				np.x += p.x;
+				np.y += p.y;
+				p = p.parent;
+				if( p == stage )
+					break;
+			}
+			return np;
 		}
 		
 		protected function initLayout() : void {
