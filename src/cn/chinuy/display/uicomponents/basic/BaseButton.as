@@ -109,7 +109,8 @@ package cn.chinuy.display.uicomponents.basic {
 					_selectedTip = tip;
 				if( isNull( _unselectedTip ))
 					_unselectedTip = tip;
-				tip = selected ? selectedTip : unselectedTip;
+				if( selectedTip != "" || unselectedTip != "" )
+					tip = selected ? selectedTip : unselectedTip;
 				si = mouseDown ? 3 : ( mouseOver ? 2 : 1 );
 				if( selected ) {
 					si += 3;

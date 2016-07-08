@@ -156,9 +156,13 @@ package cn.chinuy.display.uicomponents.basic {
 				y = Math.max( 0, Math.min( posY, stage.stageHeight - height ));
 				
 				if( _arrow ) {
-					var halfWidth : Number = width / 2;
-					var hw : Number = _arrow.width / 2;
-					_arrow.hcenter = Math.max( hw - halfWidth, Math.min( posX - x, halfWidth - hw ));
+					if( target.tipFollowMouseX ) {
+						var halfWidth : Number = width / 2;
+						var hw : Number = _arrow.width / 2;
+						_arrow.hcenter = Math.max( hw - halfWidth, Math.min( posX - x, halfWidth - hw ));
+					} else {
+						_arrow.hcenter = 0;
+					}
 				}
 			}
 		}

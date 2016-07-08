@@ -28,6 +28,8 @@ package cn.chinuy.display.uicore {
 		private var focusEnabledValue : Boolean = true;
 		private var enabledValue : Boolean = true;
 		
+		private var _toolTip : ToolTip;
+		private var _tipEnabled : Boolean = true;
 		private var _tipValue : String = "";
 		private var _tipFollowMouseX : Boolean = true;
 		private var _tipFollowMouseY : Boolean = true;
@@ -65,6 +67,14 @@ package cn.chinuy.display.uicore {
 			width = defaultWidth;
 			height = defaultHeight;
 			skin = defaultSkin;
+		}
+		
+		public function get tipEnabled() : Boolean {
+			return _tipEnabled;
+		}
+		
+		public function set tipEnabled( value : Boolean ) : void {
+			_tipEnabled = value;
 		}
 		
 		public function get tip() : String {
@@ -227,8 +237,11 @@ package cn.chinuy.display.uicore {
 		}
 		
 		private function onRollOverStateHandler( event : MouseEvent ) : void {
-			_mouseOver = event.type == MouseEvent.ROLL_OVER;
-			onMouseOverState();
+			var over : Boolean = event.type == MouseEvent.ROLL_OVER;
+			if( over != _mouseOver ) {
+				_mouseOver = over;
+				onMouseOverState();
+			}
 		}
 		
 		private function onSkinChanged( e : SkinEvent ) : void {
@@ -290,15 +303,23 @@ package cn.chinuy.display.uicore {
 		protected function updateDisplay() : void {
 		}
 		
-		protected function get tooltip() : ToolTip {
-			return ToolTip.defaultInstance;
+		public function set tooltip( tip : ToolTip ) : void {
+			_toolTip = tip;
+		}
+		
+		public function get tooltip() : ToolTip {
+			if( _toolTip == null ) {
+				_toolTip = ToolTip.defaultInstance;
+			}
+			return _toolTip;
 		}
 		
 		private function updateTip() : void {
-			if( stage && tooltip ) {
+			if( tipEnabled && stage && tooltip ) {
 				if( tip != "" && mouseOver ) {
 					tooltip.target = this;
-					stage.addChild( tooltip );
+					if( tooltip.parent != stage )
+						stage.addChild( tooltip );
 				} else {
 					if( tooltip.parent ) {
 						tooltip.parent.removeChild( tooltip );
