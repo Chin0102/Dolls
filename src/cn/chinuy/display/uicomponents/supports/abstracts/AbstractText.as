@@ -118,6 +118,18 @@ package cn.chinuy.display.uicomponents.supports.abstracts {
 			field.defaultTextFormat = value;
 		}
 		
+		public function get maxChars() : int {
+			return field.maxChars;
+		}
+		
+		public function set maxChars( value : int ) : void {
+			field.maxChars = value;
+		}
+		
+		public function set restrict( value : String ) : void {
+			field.restrict = value;
+		}
+		
 		public function get underline() : Boolean {
 			return field.underline;
 		}

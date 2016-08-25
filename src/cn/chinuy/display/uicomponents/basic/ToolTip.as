@@ -90,10 +90,12 @@ package cn.chinuy.display.uicomponents.basic {
 		
 		private var targetLocalPoint : Point = new Point();
 		private var targetGlobalPoint : Point;
+		private var lastTipWidth : int;
 		
 		private function checkAnchorPoint() : void {
-			var apChanged : Boolean = anchorPoint != target.tipAnchorPoint;
+			var apChanged : Boolean = ( anchorPoint != target.tipAnchorPoint || lastTipWidth != width );
 			if( apChanged ) {
+				lastTipWidth = width;
 				var halfWidth : Number = width / 2;
 				var halfHeight : Number = height / 2;
 				anchorPoint = target.tipAnchorPoint;
