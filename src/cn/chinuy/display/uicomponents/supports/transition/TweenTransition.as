@@ -18,16 +18,26 @@ package cn.chinuy.display.uicomponents.supports.transition {
 		private var _positiveDuration : int;
 		private var _negativeObj : Object;
 		private var _negativeDuration : int;
+		private var _invisibleOnClose : Boolean;
 		
 		private var target : ITransitable;
 		private var positive : Boolean;
 		
-		public function TweenTransition( positiveObj : Object, negativeObj : Object, positiveDuraion : int = 150, negativeDuration : int = 150 ) {
+		public function TweenTransition( positiveObj : Object, negativeObj : Object, positiveDuraion : int = 150, negativeDuration : int = 150, invisibleOnClose : Boolean = true ) {
 			super();
 			this.positiveObj = positiveObj;
 			this.negativeObj = negativeObj;
 			this.positiveDuration = positiveDuraion;
 			this.negativeDuration = negativeDuration;
+			this.invisibleOnClose = invisibleOnClose;
+		}
+		
+		public function get invisibleOnClose() : Boolean {
+			return _invisibleOnClose;
+		}
+		
+		public function set invisibleOnClose( value : Boolean ) : void {
+			_invisibleOnClose = value;
 		}
 		
 		public function get negativeDuration() : int {
@@ -64,7 +74,7 @@ package cn.chinuy.display.uicomponents.supports.transition {
 		
 		protected function onFinish( event : Event ) : void {
 			dispatchEvent( new TransitionEvent( TransitionEvent.End, positive ));
-			if( !positive ) {
+			if( invisibleOnClose && !positive ) {
 				target.displayObject.visible = false;
 			}
 		}
