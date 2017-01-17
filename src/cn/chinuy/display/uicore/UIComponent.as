@@ -219,6 +219,17 @@ package cn.chinuy.display.uicore {
 		
 		private function onAdd2Stage( e : Event ) : void {
 			stage.addEventListener( MouseEvent.MOUSE_UP, onMouseUpHandler );
+			stage.addEventListener( Event.FULLSCREEN, onFullHandler );
+		}
+		
+		private function onFullHandler( e : Event ) : void {
+			onFullStageState();
+		}
+		
+		protected function onFullStageState() : void {
+			_mouseOver = false;
+			_mouseDown = false;
+			updateTip();
 		}
 		
 		private function onMouseUpHandler( event : MouseEvent ) : void {

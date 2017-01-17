@@ -101,6 +101,11 @@ package cn.chinuy.display.uicomponents.basic {
 			}
 		}
 		
+		override protected function onFullStageState() : void {
+			super.onFullStageState();
+			updateState();
+		}
+		
 		protected function updateState() : void {
 			var si : int;
 			var dsi : int = 1;
