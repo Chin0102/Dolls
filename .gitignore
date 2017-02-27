@@ -2,5 +2,4 @@ bin/
 bin-debug/
 bin-release/
 .settings/
-.project
 .DS_Store
