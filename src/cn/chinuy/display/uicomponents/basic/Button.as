@@ -38,6 +38,10 @@ package cn.chinuy.display.uicomponents.basic {
 			buttonLabel.value = value;
 		}
 		
+		public function set htmlLabel( value : String ) : void {
+			buttonLabel.htmlValue = value;
+		}
+		
 		public function get label() : String {
 			return buttonLabel.value;
 		}
